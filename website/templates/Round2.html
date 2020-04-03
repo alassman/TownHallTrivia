@@ -2,7 +2,7 @@
 
 <html>
   <head>
-    <script src="/static/javascript/downloadCsv.js"></script>
+    <script src="/static/javascript/csvManagement.js"></script>
   </head>
   <body>
     {% extends "layout.html" %}
@@ -17,7 +17,7 @@
           Question 4: <input type="text" name="Question4" size="50"><br>
           Question 5: <input type="text" name="Question5" size="50"><br>
           Question 6: <input type="text" name="Question6" size="50"><br>
-          <input type="button" value="submit" onclick="download_csv(this.form)">
+          <input type="button" value="submit" onclick="DownloadCsv(this.form)">
         </form>
       </div>
     {% endblock %}

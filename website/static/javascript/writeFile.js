@@ -1,8 +1,0 @@
-function WriteToFile(passForm) {
-  var fso = new ActiveXObject("Scripting.FileSystemObject");
-  var fileLoc = "/Users/AdamLassman/Desktop/TownHallTrivia/sample.csv";
-  var file = fso.CreateTextFile(fileLoc, true);
-  file.writeline(passForm.FirstName.value + ',' + passForm.LastName.value);
-  file.Close();
-  alert('File created successfully at location: ' + fileLoc);
-}

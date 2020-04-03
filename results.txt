@@ -1,0 +1,30 @@
+
+team1 (6)
+Score	Team Answer	Official Answer
+1	a		a
+1	b		b
+1	c		c
+1	d,d		d
+1	e		e
+1	hello		hey,hi,hello
+
+team2 (0)
+Score	Team Answer	Official Answer
+0	1		a
+0	2		b
+0	3		c
+0	4		d
+0	5		e
+0	6		hey,hi,hello
+
+team3 (5)
+Score	Team Answer	Official Answer
+1	a		a
+1	b		b
+1	c		c
+0	e		d
+1	e		e
+1	hey		hey,hi,hello
+team1->6
+team2->0
+team3->5

@@ -5,24 +5,21 @@ import csv
 allTeamAnswers = []
 answerKey = []
 outputFileName = "defaultOutput.txt"
+perAnswerInfo = []
+perTeamInfo = [["Team Name","Total Score"]]
 
 def main():
 	ReadCsvs()
 	scores = {}
 	for teamAnswers in allTeamAnswers: 
-		# parsing each column of a teamAnswers
 		scores[teamAnswers[1]] = CheckAnswers(teamAnswers[1], teamAnswers[2:len(teamAnswers)])
-	for key in scores:
-		results = key + '->' + str(scores[key])
-		print results
-		# writeToFile(results)
+	writeToFile()
+
 
 def ReadCsvs():
 	global answerKey
 	global allTeamAnswers
 	global outputFileName
-	# answerKeyFile = input("Enter Answer Key File Path: ")
-	# teamAnswerFiles = input("Enter Teams' Answers File Path: ")
 	answerKeyFile = "answerKey.csv"
 	teamAnswerFiles = "Round 1.csv"
 	outputFileName = teamAnswerFiles.split(".")[0] + "Results.txt"
@@ -49,10 +46,8 @@ def CompareCleansedAnswers(teamAnswer, officialAnswer):
 
 
 def CheckAnswers(teamName, teamAnswers):
-	perAnswerInfo = []
-	perTeamInfo = []
-	perAnswerInfo.append(["Team Name", "Question Score", "Team Answer", "Official Answer"])
-	perTeamInfo.append(["Team Name", "Total Score"])
+	global perAnswerInfo
+	global perTeamInfo
 
 	score = 0
 	for i in range(0, 6):
@@ -70,30 +65,26 @@ def CheckAnswers(teamName, teamAnswers):
 		# print cleansedTeamAnswer, "\t", cleansedOfficialAnswer
 		answerScore = CompareCleansedAnswers(cleansedTeamAnswer, cleansedOfficialAnswer)
 		score += answerScore
-		helpfulInfo.append("%s\t%s\t\t%s" % (str(answerScore), teamAnswers[i], answerKey[i]))
-		perAnswerInfo.append([teamName, str(answerScore), teamAnswers[i], answerKey[i]])
-	headline = "\n%s (%s)\nScore\tTeam Answer\tOfficial Answer" % (teamName, score)
-	helpfulInfo.insert(0, headline)
-	perTeamInfo.append(teamName, str(score))
-	PrintAnswers(helpfulInfo)
-
-	# writeToFile(helpfulInfo)
+		perAnswerInfo.append("%s\t%s\t%s\t%s" % ("Question " + str(i)), str(answerScore), teamAnswers[i], answerKey[i])
+	perAnswerInfo.insert("%s (%s)" % teamName, score, len(perAnswerInfo)-1)
+	perTeamInfo.append([teamName, str(score)])
 	return score
-
-def PrintAnswers(answers):
-	for col in answers: 
-		print("%s"%col)
 
 def initializeOutputFile():
 	outputFile = open(outputFileName, "w")
 	outputFile.write("Result Output File\n")
 	outputFile.close()
 
-def writeToFile(output):
+def writeToTextFile(output):
 	# TODO::Convert list to string
 	outputFile = open(outputFileName, "a")
 	outputFile.write(output)
 	outputFile.close()
+
+def writeToCsv(output):
+    with open('employee_file.csv', mode='w') as employee_file:
+        employee_writer = csv.writer(employee_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        employee_writer.writerow(['John Smith', 'Accounting', 'November'])
 
 if __name__ == "__main__":
     main()

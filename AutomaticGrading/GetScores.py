@@ -21,7 +21,7 @@ def main():
     scores = {}
     i = 1
     for teamAnswers in allTeamAnswers:
-        print "Processing Answers for Team: " + teamAnswers[1]
+        print("Processing Answers for Team: " + teamAnswers[1])
         scores[teamAnswers[1]] = CheckAnswers(teamAnswers[1], teamAnswers[2:len(teamAnswers)])
         if i % teamsPerGrader == 0:
             UpdateOutputFileNames(i / teamsPerGrader)
@@ -30,8 +30,8 @@ def main():
             initializeOutputVariables()
 
         i += 1
-    print "For convenience, results are located in the " + outputFolderName + " folder."
-    print "Program has Finished!"
+    print("For convenience, results are located in the " + outputFolderName + " folder.")
+    print("Program has Finished!")
 
 def UpdateOutputFileNames(graderId):
     global outputTextFileName
@@ -44,7 +44,7 @@ def ReadCsvs():
     global answerPoints
     global allTeamAnswers
     global roundName
-    print "Here are the files in this folder:"
+    print("Here are the files in this folder:")
     os.system('ls')
     answerKeyFile = input("Answer Key File Name (use \"\"): ")
     teamAnswerFiles = input("Round Answers File Name (use \"\"): ")

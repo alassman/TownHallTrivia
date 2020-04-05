@@ -55,13 +55,13 @@ def ReadCsvs():
     answerKeyFields = []
     with open(answerKeyFile, 'r') as csvfile: 
         answerKeyReader = csv.reader(csvfile)
-        answerKeyFields = answerKeyReader.next() 
-        answerKey = answerKeyReader.next()
-        answerPoints = answerKeyReader.next()
+        answerKeyFields = next(answerKeyReader) 
+        answerKey = next(answerKeyReader)
+        answerPoints = next(answerKeyReader)
 
     with open(teamAnswerFiles, 'r') as csvfile: 
         teamAnswersReader = csv.reader(csvfile)
-        answerFields = teamAnswersReader.next()
+        answerFields = next(teamAnswersReader)
         for row in teamAnswersReader: 
             allTeamAnswers.append(row)
 
@@ -105,7 +105,7 @@ def CheckAnswers(teamName, teamAnswers):
 # Removes punctuation, gets rid of whitespace, converts to lower case
 def cleanWord(word):
     cleansedWord = word
-    cleansedWord = cleansedWord.translate(None, string.punctuation)
+    cleansedWord = cleansedWord.translate(str.maketrans('','',string.punctuation))
     cleansedWord = "".join(cleansedWord.split())
     cleansedWord = cleansedWord.lower()
     return cleansedWord

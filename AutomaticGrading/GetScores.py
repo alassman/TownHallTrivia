@@ -1,16 +1,17 @@
 # importing csv module 
 import csv, string
 
-# initializing the titles and rows list 
+# Globals
 allTeamAnswers = []
 answerKey = []
 answerPoints = []
-outputTextFileName = "defaultTextOutput.txt"
-outputCsvFileName = "defaultCsvOutput.csv"
-perAnswerInfo = ["---\nTeam_Name (Overall_Score)\nQuestion_X, Q_Score, Team_Ans | Official_Ans\n---"]
-perTeamInfo = [["Team Name","Total Score"]]
+outputTextFileName = ""
+outputCsvFileName = ""
+perAnswerInfo = []
+perTeamInfo = []
 
 def main():
+    initializeGlobals()
     ReadCsvs()
     scores = {}
     for teamAnswers in allTeamAnswers: 
@@ -24,10 +25,10 @@ def ReadCsvs():
     global allTeamAnswers
     global outputTextFileName
     global outputCsvFileName
-    # answerKeyFile = input("Answer Key File Name: ")
-    # teamAnswerFiles = input("Round Answers File Name: ")
-    answerKeyFile = "Round 1_AnswerKey.csv"
-    teamAnswerFiles = "Round 1.csv"
+    answerKeyFile = input("Answer Key File Name (use ""): ")
+    teamAnswerFiles = input("Round Answers File Name (use ""): ")
+    # answerKeyFile = "Round 1_AnswerKey.csv"
+    # teamAnswerFiles = "Round 1.csv"
     outputTextFileName = teamAnswerFiles.split(".")[0] + "_DetailedResults.txt"
     outputCsvFileName = teamAnswerFiles.split(".")[0] + "_Results.csv"
     answerFields = []
@@ -72,10 +73,8 @@ def CheckAnswers(teamName, teamAnswers):
             cleansedOfficialAnswer.append(cleanWord(officialAnswerPart))
         answerScore = CompareCleansedAnswers(cleansedTeamAnswer, cleansedOfficialAnswer)
         score += answerScore
-        print "answerPoints[i]: " + answerPoints[i]
-        print "answerScore: " + str(answerScore)
         if answerPoints[i] != str(answerScore):
-            perAnswerInfo.append("%s\t%s\t%s\t|\t%s" % ("Question_" + str(i + 1), str(answerScore), teamAnswers[i], answerKey[i]))
+            perAnswerInfo.append("%s\t%s\t%s\t%s\t|\t%s" % ("Question_" + str(i + 1), answerPoints[i], str(answerScore), teamAnswers[i], answerKey[i]))
     perAnswerInfo.insert(answerInfoInsertLocation, "\n%s (%s)" % (teamName, str(score)))
     perTeamInfo.append([teamName, str(score)])
     return score
@@ -101,6 +100,16 @@ def writePerTeamInfoToCsv():
         result_writer = csv.writer(result_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         for row in perTeamInfo:
             result_writer.writerow(row)
+
+def initializeGlobals():
+    global outputTextFileName
+    global outputCsvFileName
+    global perAnswerInfo
+    global perTeamInfo
+    outputTextFileName = "defaultTextOutput.txt"
+    outputCsvFileName = "defaultCsvOutput.csv"
+    perAnswerInfo.append("---\nTeam_Name (Overall_Score)\nQuestion_X, Exp_Score, Act_Score, Team_Ans | Official_Ans\n---")
+    perTeamInfo.append(["Team Name","Total Score"])
 
 if __name__ == "__main__":
     main()

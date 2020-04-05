@@ -1,17 +1,22 @@
 ---
 Team_Name (Overall_Score)
-Question_X, Q_Score, Team_Ans | Official_Ans
+Question_X, Exp_Score, Act_Score, Team_Ans | Official_Ans
 ---
 
-team1 (7)
+team1 (5)
+Question_1	1	0	splat,sploof	|	a
+Question_4	1	0	asdasd"asdasd	|	d
 
 team2 (0)
-Question_1	0	1	|	a
-Question_2	0	2	|	b,c
-Question_3	0	3	|	c
-Question_4	0	4	|	d
-Question_5	0	5	|	e
-Question_6	0	f	|	knight,night
+Question_1	1	0	1	|	a
+Question_2	2	0	2	|	b,c
+Question_3	1	0	3	|	c
+Question_4	1	0	4	|	d
+Question_5	1	0	5	|	e
+Question_6	1	0	f	|	knight,night
 
-team3 (6)
-Question_2	1	b	|	b,c
+team3 (5)
+Question_2	2	1	b,b	|	b,c
+Question_3	1	0	hola	|	c
+Question_5	1	0	f	|	e
+Question_6	1	2	night,knight	|	knight,night

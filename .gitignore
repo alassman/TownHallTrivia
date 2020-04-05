@@ -11,5 +11,3 @@ src/*.egg-info
 lib
 lib64
 *.svn
-*.csv
-*.txt

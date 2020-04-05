@@ -22,8 +22,10 @@ def ReadCsvs():
     global allTeamAnswers
     global outputTextFileName
     global outputCsvFileName
-    answerKeyFile = input("Answer Key File Name: ")
-    teamAnswerFiles = input("Round Answers File Name: ")
+    # answerKeyFile = input("Answer Key File Name: ")
+    # teamAnswerFiles = input("Round Answers File Name: ")
+    answerKeyFile = "Round 1_AnswerKey.csv"
+    teamAnswerFiles = "Round 1.csv"
     outputTextFileName = teamAnswerFiles.split(".")[0] + "_DetailedResults.txt"
     outputCsvFileName = teamAnswerFiles.split(".")[0] + "_Results.csv"
     answerFields = []
@@ -77,11 +79,11 @@ def CheckAnswers(teamName, teamAnswers):
 # Removes punctuation, gets rid of whitespace, converts to lower case
 def cleanWord(word):
     cleansedWord = word
-    print "Before: " + word
+    # print "Before: " + word
     cleansedWord = cleansedWord.translate(None, string.punctuation)
     cleansedWord = "".join(cleansedWord.split())
     cleansedWord = cleansedWord.lower()
-    print "After: " + cleansedWord
+    # print "After: " + cleansedWord
     return cleansedWord
 
 def writePerAnswerInfoToTextFile():

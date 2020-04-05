@@ -1,5 +1,5 @@
 # importing csv module 
-import csv, string
+import csv, string, os
 
 # Globals
 allTeamAnswers = []
@@ -7,30 +7,50 @@ answerKey = []
 answerPoints = []
 outputTextFileName = ""
 outputCsvFileName = ""
+roundName = ""
+outputFolderName = ""
 perAnswerInfo = []
 perTeamInfo = []
 
 def main():
-    initializeGlobals()
+    initializeOutputVariables()
     ReadCsvs()
+    numGraders = input("How many graders?: ")
+    teamsPerGrader = len(allTeamAnswers) / int(numGraders)
+    CreateResultsFolder()
     scores = {}
-    for teamAnswers in allTeamAnswers: 
+    i = 1
+    for teamAnswers in allTeamAnswers:
+        print "Processing Answers for Team: " + teamAnswers[1]
         scores[teamAnswers[1]] = CheckAnswers(teamAnswers[1], teamAnswers[2:len(teamAnswers)])
-    writePerAnswerInfoToTextFile()
-    writePerTeamInfoToCsv()
+        if i % teamsPerGrader == 0:
+            UpdateOutputFileNames(i / teamsPerGrader)
+            writePerAnswerInfoToTextFile()
+            writePerTeamInfoToCsv()
+            initializeOutputVariables()
+
+        i += 1
+    print "For convenience, results are located in the " + outputFolderName + " folder."
+    print "Program has Finished!"
+
+def UpdateOutputFileNames(graderId):
+    global outputTextFileName
+    global outputCsvFileName
+    outputTextFileName = "DetailedResults_" + str(graderId) +".txt"
+    outputCsvFileName = "Results_" + str(graderId) + ".csv"
 
 def ReadCsvs():
     global answerKey
     global answerPoints
     global allTeamAnswers
-    global outputTextFileName
-    global outputCsvFileName
-    answerKeyFile = input("Answer Key File Name (use ""): ")
-    teamAnswerFiles = input("Round Answers File Name (use ""): ")
+    global roundName
+    print "Here are the files in this folder:"
+    os.system('ls')
+    answerKeyFile = input("Answer Key File Name (use \"\"): ")
+    teamAnswerFiles = input("Round Answers File Name (use \"\"): ")
+    roundName = teamAnswerFiles.split(".")[0]
     # answerKeyFile = "Round 1_AnswerKey.csv"
     # teamAnswerFiles = "Round 1.csv"
-    outputTextFileName = teamAnswerFiles.split(".")[0] + "_DetailedResults.txt"
-    outputCsvFileName = teamAnswerFiles.split(".")[0] + "_Results.csv"
     answerFields = []
     answerKeyFields = []
     with open(answerKeyFile, 'r') as csvfile: 
@@ -64,7 +84,10 @@ def CheckAnswers(teamName, teamAnswers):
         cleansedTeamAnswer = []
         cleansedOfficialAnswer = []
         # Get single answer as a list
-        teamAnswer = teamAnswers[i].split(",")
+        if "&" in teamAnswers[i]:
+            teamAnswer = teamAnswers[i].split("&")
+        else:
+            teamAnswer = teamAnswers[i].split(",")
         for teamAnswerPart in teamAnswer:
             # Cleanse all parts of answer of all white space
             cleansedTeamAnswer.append(cleanWord(teamAnswerPart))
@@ -75,7 +98,7 @@ def CheckAnswers(teamName, teamAnswers):
         score += answerScore
         if answerPoints[i] != str(answerScore):
             perAnswerInfo.append("%s\t%s\t%s\t%s\t|\t%s" % ("Question_" + str(i + 1), answerPoints[i], str(answerScore), teamAnswers[i], answerKey[i]))
-    perAnswerInfo.insert(answerInfoInsertLocation, "\n%s (%s)" % (teamName, str(score)))
+    perAnswerInfo.insert(answerInfoInsertLocation, "\n%s --> %s" % (teamName, str(score)))
     perTeamInfo.append([teamName, str(score)])
     return score
 
@@ -88,28 +111,34 @@ def cleanWord(word):
     return cleansedWord
 
 def writePerAnswerInfoToTextFile():
+    global perAnswerInfo
     info = ""
     for line in perAnswerInfo:
         info = info + line + "\n"
-    outputFile = open(outputTextFileName, "w")
+    outputFile = open(os.path.join(outputFolderName, outputTextFileName), "w")
     outputFile.write(info)
     outputFile.close()
 
 def writePerTeamInfoToCsv():
-    with open(outputCsvFileName, mode='w') as result_file:
+    global perTeamInfo
+    with open(os.path.join(outputFolderName, outputCsvFileName), mode='w') as result_file:
         result_writer = csv.writer(result_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         for row in perTeamInfo:
             result_writer.writerow(row)
 
-def initializeGlobals():
-    global outputTextFileName
-    global outputCsvFileName
+def CreateResultsFolder():
+    global outputFolderName
+    currentWorkingDirectory = os.getcwd()
+    outputFolderName = roundName + "_Results/"
+    resultsPath = os.path.join(currentWorkingDirectory, outputFolderName)
+    if os.path.exists(resultsPath) == False:
+        os.makedirs(resultsPath)
+
+def initializeOutputVariables():
     global perAnswerInfo
     global perTeamInfo
-    outputTextFileName = "defaultTextOutput.txt"
-    outputCsvFileName = "defaultCsvOutput.csv"
-    perAnswerInfo.append("---\nTeam_Name (Overall_Score)\nQuestion_X, Exp_Score, Act_Score, Team_Ans | Official_Ans\n---")
-    perTeamInfo.append(["Team Name","Total Score"])
+    perAnswerInfo = ["---\nTeam_Name --> Overall_Score\nQuestion_X, Exp_Score, Act_Score, Team_Ans | Official_Ans\n---"]
+    perTeamInfo = [["Team Name","Total Score"]]
 
 if __name__ == "__main__":
     main()

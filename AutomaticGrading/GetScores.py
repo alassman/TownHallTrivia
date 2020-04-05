@@ -4,6 +4,7 @@ import csv, string
 # initializing the titles and rows list 
 allTeamAnswers = []
 answerKey = []
+answerPoints = []
 outputTextFileName = "defaultTextOutput.txt"
 outputCsvFileName = "defaultCsvOutput.csv"
 perAnswerInfo = ["---\nTeam_Name (Overall_Score)\nQuestion_X, Q_Score, Team_Ans | Official_Ans\n---"]
@@ -19,6 +20,7 @@ def main():
 
 def ReadCsvs():
     global answerKey
+    global answerPoints
     global allTeamAnswers
     global outputTextFileName
     global outputCsvFileName
@@ -34,6 +36,7 @@ def ReadCsvs():
         answerKeyReader = csv.reader(csvfile)
         answerKeyFields = answerKeyReader.next() 
         answerKey = answerKeyReader.next()
+        answerPoints = answerKeyReader.next()
 
     with open(teamAnswerFiles, 'r') as csvfile: 
         teamAnswersReader = csv.reader(csvfile)
@@ -56,7 +59,7 @@ def CheckAnswers(teamName, teamAnswers):
 
     answerInfoInsertLocation = len(perAnswerInfo)
     score = 0
-    for i in range(0, 6):
+    for i in range(0, len(answerKey)):
         cleansedTeamAnswer = []
         cleansedOfficialAnswer = []
         # Get single answer as a list
@@ -67,11 +70,12 @@ def CheckAnswers(teamName, teamAnswers):
         officialAnswer = answerKey[i].split(",")
         for officialAnswerPart in officialAnswer:
             cleansedOfficialAnswer.append(cleanWord(officialAnswerPart))
-        # print "teamAnswers: ", teamAnswers[i], "officialAnswer: ", answerKey[i]
-        # print cleansedTeamAnswer, "\t", cleansedOfficialAnswer
         answerScore = CompareCleansedAnswers(cleansedTeamAnswer, cleansedOfficialAnswer)
         score += answerScore
-        perAnswerInfo.append("%s\t%s\t%s\t|\t%s" % ("Question_" + str(i + 1), str(answerScore), teamAnswers[i], answerKey[i]))
+        print "answerPoints[i]: " + answerPoints[i]
+        print "answerScore: " + str(answerScore)
+        if answerPoints[i] != str(answerScore):
+            perAnswerInfo.append("%s\t%s\t%s\t|\t%s" % ("Question_" + str(i + 1), str(answerScore), teamAnswers[i], answerKey[i]))
     perAnswerInfo.insert(answerInfoInsertLocation, "\n%s (%s)" % (teamName, str(score)))
     perTeamInfo.append([teamName, str(score)])
     return score
@@ -79,11 +83,9 @@ def CheckAnswers(teamName, teamAnswers):
 # Removes punctuation, gets rid of whitespace, converts to lower case
 def cleanWord(word):
     cleansedWord = word
-    # print "Before: " + word
     cleansedWord = cleansedWord.translate(None, string.punctuation)
     cleansedWord = "".join(cleansedWord.split())
     cleansedWord = cleansedWord.lower()
-    # print "After: " + cleansedWord
     return cleansedWord
 
 def writePerAnswerInfoToTextFile():

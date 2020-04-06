@@ -13,4 +13,6 @@ To make changes to this repository, follow these steps:
 
 6.) Let other's review your changes before merging the changes to master through the Github UI
 
+azure login: https://signup.azure.com/signup?offer=MS-AZR-0063P&appid=MyVSSPortal&Ref=MyVSSPortal
 
+to see azure benefits for microsoft account: https://my.visualstudio.com/Benefits

@@ -44,10 +44,11 @@ def ReadCsvs():
     global answerPoints
     global allTeamAnswers
     global roundName
-    print("Here are the files in this folder:")
+    print("\nBelow are the files in this folder:\n")
     os.system('ls')
-    answerKeyFile = input("Answer Key File Name (use \"\"): ")
-    teamAnswerFiles = input("Round Answers File Name (use \"\"): ")
+    print("\n")
+    answerKeyFile = input("Answer Key File Name: ")
+    teamAnswerFiles = input("Round Answers File Name: ")
     roundName = teamAnswerFiles.split(".")[0]
     # answerKeyFile = "Round 1_AnswerKey.csv"
     # teamAnswerFiles = "Round 1.csv"

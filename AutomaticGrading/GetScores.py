@@ -1,5 +1,5 @@
 # importing csv module 
-import csv, string, os
+import csv, string, os, math
 
 # Globals
 allTeamAnswers = []
@@ -23,8 +23,8 @@ def main():
     for teamAnswers in allTeamAnswers:
         print("Processing Answers for Team: " + teamAnswers[1])
         scores[teamAnswers[1]] = CheckAnswers(teamAnswers[1], teamAnswers[2:len(teamAnswers)])
-        if i % teamsPerGrader == 0:
-            UpdateOutputFileNames(i / teamsPerGrader)
+        if i % int(teamsPerGrader) == 0:
+            UpdateOutputFileNames(math.ceil(i / teamsPerGrader))
             writePerAnswerInfoToTextFile()
             writePerTeamInfoToCsv()
             initializeOutputVariables()
@@ -36,6 +36,7 @@ def main():
 def UpdateOutputFileNames(graderId):
     global outputTextFileName
     global outputCsvFileName
+
     outputTextFileName = "DetailedResults_" + str(graderId) +".txt"
     outputCsvFileName = "Results_" + str(graderId) + ".csv"
 
